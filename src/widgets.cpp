@@ -75,7 +75,7 @@ namespace
         bool hovered, held;
         bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
         if (hovered || selected)
-            w->DrawList->AddRectFilled(bb.Min, bb.Max, selected ? IM_COL32(68, 68, 75, 255) : col::hovered, 4);
+            w->DrawList->AddRectFilled(bb.Min, bb.Max, col::white(selected ? 20 : 12), 4);
 
         text(w->DrawList, { bb.Min.x + pad, centered(bb) }, selected ? col::accent : col::text, label);
         return pressed;
@@ -204,7 +204,7 @@ bool ui::checkbox(const char* label, bool& value, ImU32 color)
     if (pressed)
         value = !value;
 
-    ImU32 box = value ? col::checked : hovered ? IM_COL32(88, 88, 94, 255) : col::check;
+    ImU32 box = value ? col::checked : hovered ? col::white(57) : col::check;
     w->DrawList->AddRectFilled(pos, pos + ImVec2(18, 18), box, 4);
     text(w->DrawList, { pos.x + 26, centered(bb) }, color, label);
     return pressed;
@@ -320,7 +320,7 @@ bool ui::button(const char* label, float width, float height)
     bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
 
     ImDrawList* dl = w->DrawList;
-    frame(dl, bb, held ? col::control : hovered ? col::hovered : IM_COL32(54, 54, 59, 255), col::outline);
+    frame(dl, bb, held ? col::control : hovered ? col::hovered : col::button, col::white(10));
     text(dl, { bb.GetCenter().x - text_width(label) * 0.5f, centered(bb) }, hovered ? col::bright : col::text, label);
     return pressed;
 }
@@ -457,7 +457,7 @@ void ui::keybind(ImGuiKey& key)
         }
     }
 
-    frame(w->DrawList, bb, hovered ? col::hovered : col::control, IM_COL32(74, 74, 79, 255), 10);
+    frame(w->DrawList, bb, hovered ? col::hovered : col::control, col::white(27), 10);
     text(w->DrawList, { bb.GetCenter().x - text_width(name) * 0.5f, centered(bb) }, waiting ? col::accent : col::text, name);
 }
 
@@ -529,6 +529,6 @@ void ui::value(const char* str, ImU32 color)
 void ui::draw_badge(ImDrawList* dl, ImVec2 pos, const char* str)
 {
     ImRect bb(pos, pos + ImVec2(text_width(str) + 16, 16));
-    frame(dl, bb, IM_COL32(41, 38, 43, 255), IM_COL32(54, 42, 46, 255));
-    text(dl, { bb.Min.x + 8, centered(bb) }, col::accent_dim, str);
+    frame(dl, bb, col::tint, IM_COL32(181, 96, 96, 32));
+    text(dl, { bb.Min.x + 8, centered(bb) }, col::accent, str);
 }

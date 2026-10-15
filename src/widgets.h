@@ -8,15 +8,21 @@
 
 namespace col
 {
-    constexpr ImU32 window      = IM_COL32(31, 31, 37, 255);
-    constexpr ImU32 border      = IM_COL32(57, 57, 63, 255);
-    constexpr ImU32 panel       = IM_COL32(40, 40, 46, 255);
-    constexpr ImU32 outline     = IM_COL32(61, 61, 66, 255);
-    constexpr ImU32 divider     = IM_COL32(47, 47, 53, 255);
-    constexpr ImU32 control     = IM_COL32(53, 53, 59, 255);
-    constexpr ImU32 hovered     = IM_COL32(60, 60, 67, 255);
-    constexpr ImU32 frame       = IM_COL32(64, 64, 69, 255);
-    constexpr ImU32 check       = IM_COL32(79, 79, 84, 255);
+    constexpr ImU32 white(int alpha)
+    {
+        return IM_COL32(255, 255, 255, alpha);
+    }
+
+    constexpr ImU32 border      = white(30);
+    constexpr ImU32 panel       = white(10);
+    constexpr ImU32 outline     = white(25);
+    constexpr ImU32 divider     = white(8);
+    constexpr ImU32 control     = white(15);
+    constexpr ImU32 button      = white(17);
+    constexpr ImU32 hovered     = white(24);
+    constexpr ImU32 frame       = white(14);
+    constexpr ImU32 check       = white(46);
+    constexpr ImU32 popup       = IM_COL32(40, 40, 46, 255);
     constexpr ImU32 checked     = IM_COL32(165, 93, 94, 255);
     constexpr ImU32 fill        = IM_COL32(142, 75, 75, 255);
     constexpr ImU32 text        = IM_COL32(140, 140, 150, 255);
@@ -25,7 +31,7 @@ namespace col
     constexpr ImU32 faint       = IM_COL32(89, 89, 97, 255);
     constexpr ImU32 accent      = IM_COL32(181, 96, 96, 255);
     constexpr ImU32 accent_dim  = IM_COL32(120, 67, 68, 255);
-    constexpr ImU32 tint        = IM_COL32(44, 36, 41, 255);
+    constexpr ImU32 tint        = IM_COL32(181, 96, 96, 18);
     constexpr ImU32 yellow      = IM_COL32(181, 150, 57, 255);
     constexpr ImU32 red         = IM_COL32(195, 75, 75, 255);
     constexpr ImU32 green       = IM_COL32(83, 153, 98, 255);

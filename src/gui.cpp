@@ -53,13 +53,12 @@ namespace
 
     void title_bar(ImDrawList* dl, float w)
     {
-        dl->AddRectFilledMultiColor({ 1, 1 }, { w - 1, 44 }, IM_COL32(44, 45, 50, 255), IM_COL32(44, 45, 50, 255),
-                                    IM_COL32(39, 39, 45, 255), IM_COL32(39, 39, 45, 255));
+        dl->AddRectFilledMultiColor({ 1, 1 }, { w - 1, 44 }, col::white(15), col::white(15), col::white(9), col::white(9));
 
         float x = 18;
         text(dl, { x, 15 }, col::accent, brand);
         x += width(brand);
-        dl->AddCircleFilled({ x + 6, 22 }, 1.5f, IM_COL32(48, 48, 54, 255));
+        dl->AddCircleFilled({ x + 6, 22 }, 1.5f, col::white(18));
         x += 11;
         text(dl, { x, 15 }, col::text, "Interface");
         x += width("Interface") + 7;
@@ -87,7 +86,7 @@ namespace
 
             bool active = current == i;
             if (active)
-                dl->AddRectFilled(bb.Min, bb.Max, IM_COL32(54, 54, 59, 255), 12);
+                dl->AddRectFilled(bb.Min, bb.Max, col::white(26), 12);
 
             ImU32 color = active ? col::accent : hovered ? col::bright : col::text;
             float y = bb.Min.y + (bb.GetHeight() - ImGui::GetFontSize()) * 0.5f;
@@ -99,7 +98,7 @@ namespace
 
     void footer(ImDrawList* dl, ImVec2 size)
     {
-        dl->AddRectFilled({ 1, size.y - 26 }, { size.x - 1, size.y - 1 }, IM_COL32(39, 38, 44, 255));
+        dl->AddRectFilled({ 1, size.y - 26 }, { size.x - 1, size.y - 1 }, col::white(9));
 
         float y = size.y - 20;
         text(dl, { 18, y }, col::accent, icon::users);
@@ -146,7 +145,8 @@ void gui::init()
     ImVec4* c = style.Colors;
     c[ImGuiCol_Text] = ImColor(col::text);
     c[ImGuiCol_TextDisabled] = ImColor(col::dim);
-    c[ImGuiCol_ChildBg] = c[ImGuiCol_PopupBg] = ImColor(col::panel);
+    c[ImGuiCol_ChildBg] = ImColor(col::panel);
+    c[ImGuiCol_PopupBg] = ImColor(col::popup);
     c[ImGuiCol_Border] = ImColor(col::outline);
     c[ImGuiCol_FrameBg] = c[ImGuiCol_FrameBgActive] = ImColor(col::control);
     c[ImGuiCol_FrameBgHovered] = ImColor(col::hovered);
@@ -171,6 +171,7 @@ void gui::render()
                                    | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
     ImDrawList* dl = ImGui::GetWindowDrawList();
+    dl->AddRectFilled({ 0, 0 }, size, IM_COL32(30, 30, 39, 176));
     dl->AddRect({ 0, 0 }, size, col::border);
     title_bar(dl, size.x);
     tab_bar(dl);

@@ -29,13 +29,13 @@ namespace
     bool create_device(HWND hwnd)
     {
         DXGI_SWAP_CHAIN_DESC desc{};
-        desc.BufferCount = 2;
+        desc.BufferCount = 1;
         desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc.OutputWindow = hwnd;
         desc.SampleDesc.Count = 1;
         desc.Windowed = TRUE;
-        desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+        desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
         constexpr D3D_DRIVER_TYPE drivers[] = { D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP };
         for (auto driver : drivers)
@@ -48,6 +48,40 @@ namespace
             }
         }
         return false;
+    }
+
+    void enable_blur(HWND hwnd)
+    {
+        struct accent_policy
+        {
+            int state;
+            int flags;
+            COLORREF color;
+            int animation;
+        };
+
+        struct composition_data
+        {
+            int attribute;
+            void* data;
+            SIZE_T size;
+        };
+
+        constexpr int blur_behind = 3;
+        constexpr int accent_attribute = 19;
+
+        using set_composition_fn = BOOL(WINAPI*)(HWND, const composition_data*);
+        auto set_composition = reinterpret_cast<set_composition_fn>(
+            GetProcAddress(GetModuleHandleW(L"user32.dll"), "SetWindowCompositionAttribute"));
+        if (!set_composition)
+            return;
+
+        MARGINS margins{ -1 };
+        DwmExtendFrameIntoClientArea(hwnd, &margins);
+
+        accent_policy accent{ blur_behind, 0, 0, 0 };
+        composition_data data{ accent_attribute, &accent, sizeof(accent) };
+        set_composition(hwnd, &data);
     }
 
     LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -131,6 +165,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int)
     COLORREF border = RGB(57, 57, 63);
     DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &corners, sizeof(corners));
     DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR, &border, sizeof(border));
+    enable_blur(hwnd);
 
     if (!create_device(hwnd))
         return 1;
@@ -166,7 +201,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int)
         drag(hwnd);
 
         ImGui::Render();
-        constexpr float clear[4] = { 31 / 255.0f, 31 / 255.0f, 37 / 255.0f, 1.0f };
+        constexpr float clear[4] = {};
         context->OMSetRenderTargets(1, target.GetAddressOf(), nullptr);
         context->ClearRenderTargetView(target.Get(), clear);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

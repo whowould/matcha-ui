@@ -7,6 +7,8 @@ Unofficial recreation of the Matcha menu UI, made with Dear ImGui and DirectX 11
 
 It's only the UI. None of the options do anything.
 
+The background is a live blur of whatever is behind the window, using the Windows compositor (Windows 10 and 11).
+
 ## Building
 
 You need Windows, Visual Studio 2022 and CMake 3.20 or newer. Everything else is in `external/`.
